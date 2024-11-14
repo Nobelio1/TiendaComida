@@ -19,10 +19,12 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -62,6 +64,16 @@ public class Sistema extends javax.swing.JFrame {
         initComponents();
         getContentPane().setBackground(new Color(29,29,54));
         listarMesas();
+        if (priv.getRol().equals("Asistente")) {
+            LabelVendedor.setText(priv.getNombre());
+        } else {
+            LabelVendedor.setText(priv.getNombre());
+        }
+        txtIdHistorialPedido.setVisible(false);
+        txtIdPedido.setVisible(false);
+        txtIdPlato.setVisible(false);
+        txtTempNumMesa.setVisible(false);
+        jTabbedPane1.setEnabled(false);
     }
 
     /**
@@ -90,11 +102,10 @@ public class Sistema extends javax.swing.JFrame {
         txtBuscarPlato = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         tableMenu = new javax.swing.JTable();
-        txtTempNumMesa = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         totalMenu = new javax.swing.JLabel();
-        btnGenerarPedido = new javax.swing.JTextField();
-        txtTempIdSala = new javax.swing.JTextField();
+        btnGenerarPedido1 = new javax.swing.JButton();
+        txtTempNumMesa = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jScroll = new javax.swing.JScrollPane();
         tableFinalizar = new javax.swing.JTable();
@@ -154,6 +165,7 @@ public class Sistema extends javax.swing.JFrame {
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(102, 153, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setPreferredSize(new java.awt.Dimension(1310, 760));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(45, 45, 82));
@@ -166,6 +178,11 @@ public class Sistema extends javax.swing.JFrame {
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/titulo.png"))); // NOI18N
         jLabel5.setToolTipText("");
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelLogoMouseClicked(evt);
+            }
+        });
 
         btnPlatos.setBackground(new java.awt.Color(0, 102, 153));
         btnPlatos.setForeground(new java.awt.Color(255, 255, 255));
@@ -265,13 +282,15 @@ public class Sistema extends javax.swing.JFrame {
         btnAddPlato.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
         btnAddPlato.setForeground(new java.awt.Color(255, 255, 255));
         btnAddPlato.setText("+");
+        btnAddPlato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddPlatoActionPerformed(evt);
+            }
+        });
 
         tblTemPlatos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "", "Nombre", "Precio"
@@ -327,10 +346,7 @@ public class Sistema extends javax.swing.JFrame {
 
         tableMenu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "", "Plato", "Cant", "Precio", "SubTotal"
@@ -353,8 +369,12 @@ public class Sistema extends javax.swing.JFrame {
         totalMenu.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         totalMenu.setText("00.00");
 
-        btnGenerarPedido.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        btnGenerarPedido.setText("Realizar Pedido");
+        btnGenerarPedido1.setText("Realizar Pedido");
+        btnGenerarPedido1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerarPedido1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -365,23 +385,20 @@ public class Sistema extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(8, 8, 8)
-                        .addComponent(txtTempNumMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(267, 267, 267)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(totalMenu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING))
-                            .addComponent(btnGenerarPedido, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(390, 390, 390)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11)
+                            .addComponent(totalMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGenerarPedido1))
                         .addGap(0, 14, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel5Layout.createSequentialGroup()
-                    .addGap(33, 33, 33)
-                    .addComponent(txtTempIdSala, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(912, Short.MAX_VALUE)))
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(txtTempNumMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -391,26 +408,20 @@ public class Sistema extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(totalMenu)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnGenerarPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(txtTempNumMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40))))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(totalMenu)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnGenerarPedido1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                    .addContainerGap(422, Short.MAX_VALUE)
-                    .addComponent(txtTempIdSala, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(96, 96, 96)))
+                .addGroup(jPanel5Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(txtTempNumMesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Pedido", jPanel5);
@@ -419,15 +430,20 @@ public class Sistema extends javax.swing.JFrame {
 
         tableFinalizar.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "", "Plato", "Cant", "Precio", "SubTotal"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScroll.setViewportView(tableFinalizar);
 
         jPanel7.add(jScroll, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 1010, 290));
@@ -457,18 +473,18 @@ public class Sistema extends javax.swing.JFrame {
             }
         });
         jPanel7.add(btnPdfPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 440, 110, 40));
-        jPanel7.add(txtIdPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 380, 50, -1));
+        jPanel7.add(txtIdPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 410, 50, -1));
         jPanel7.add(txtIdHistorialPedido, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 450, 50, -1));
 
-        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel7.setText("Fecha y Hora:");
         jPanel7.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
 
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel8.setText("Sala:");
         jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 400, -1, -1));
 
-        jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel9.setText("N° Mesa:");
         jPanel7.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, -1, -1));
 
@@ -510,12 +526,12 @@ public class Sistema extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(TablePedidos);
 
-        jPanel8.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 1020, 480));
+        jPanel8.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 1020, 480));
 
-        jLabel16.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Avenir", 1, 24)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel16.setText("Historial Pedidos");
-        jPanel8.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, 280, -1));
+        jPanel8.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, 280, -1));
 
         jTabbedPane1.addTab("Historial Pedidos", jPanel8);
 
@@ -695,16 +711,15 @@ public class Sistema extends javax.swing.JFrame {
 
         jPanel9.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 660, 520));
 
-        jPanel15.setBackground(new java.awt.Color(204, 204, 204));
         jPanel15.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel34.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        jLabel34.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel34.setText("Correo Electrónico");
-        jPanel15.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 102, -1, -1));
+        jPanel15.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
 
-        jLabel35.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        jLabel35.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel35.setText("Password");
-        jPanel15.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 130, -1));
+        jPanel15.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, 130, -1));
 
         txtCorreo.setBackground(new java.awt.Color(204, 204, 204));
         txtCorreo.setBorder(null);
@@ -720,7 +735,7 @@ public class Sistema extends javax.swing.JFrame {
         jPanel15.add(txtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 300, 30));
 
         btnIniciar.setBackground(new java.awt.Color(0, 0, 0));
-        btnIniciar.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        btnIniciar.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         btnIniciar.setForeground(new java.awt.Color(255, 255, 255));
         btnIniciar.setText("Registrar");
         btnIniciar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -731,17 +746,17 @@ public class Sistema extends javax.swing.JFrame {
         });
         jPanel15.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 300, 50));
 
-        jLabel36.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        jLabel36.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel36.setText("Nombre:");
-        jPanel15.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
+        jPanel15.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, -1, -1));
 
         txtNombre.setBackground(new java.awt.Color(204, 204, 204));
         txtNombre.setBorder(null);
         jPanel15.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 300, 30));
 
-        jLabel37.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        jLabel37.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel37.setText("Rol:");
-        jPanel15.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 90, -1));
+        jPanel15.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 90, -1));
 
         cbxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Asistente" }));
         jPanel15.add(cbxRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 380, 300, 30));
@@ -794,7 +809,7 @@ public class Sistema extends javax.swing.JFrame {
         jPanel21.setBackground(new java.awt.Color(0, 0, 0));
         jPanel21.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel39.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel39.setFont(new java.awt.Font("Avenir", 1, 18)); // NOI18N
         jLabel39.setForeground(new java.awt.Color(255, 255, 255));
         jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel39.setText("Nuevo Usuario");
@@ -871,7 +886,7 @@ public class Sistema extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoPlatoActionPerformed
 
     private void btnPlatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlatosActionPerformed
-        jTabbedPane1.setSelectedIndex(5);
+        jTabbedPane1.setSelectedIndex(4);
         LimpiarTable();
         ListarPlatos(TablePlatos);
          
@@ -912,6 +927,7 @@ public class Sistema extends javax.swing.JFrame {
         if (pregunta == 0) {
             if (pedDao.actualizarEstado(Integer.parseInt(txtIdPedido.getText()))) {
                 pedDao.pdfPedido(Integer.parseInt(txtIdPedido.getText()));
+                jTabbedPane1.setSelectedIndex(0);
             }
         }
     }//GEN-LAST:event_btnFinalizarActionPerformed
@@ -956,6 +972,110 @@ public class Sistema extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnIniciarActionPerformed
 
+    private void btnAddPlatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddPlatoActionPerformed
+        // TODO add your handling code here:
+        if (tblTemPlatos.getSelectedRow() >= 0) {
+            int id = Integer.parseInt(tblTemPlatos.getValueAt(tblTemPlatos.getSelectedRow(), 0).toString());
+            String descripcion = tblTemPlatos.getValueAt(tblTemPlatos.getSelectedRow(), 1).toString();
+            double precio = Double.parseDouble(tblTemPlatos.getValueAt(tblTemPlatos.getSelectedRow(), 2).toString());
+            double total = 1 * precio;
+            item = item + 1;
+            tmp = (DefaultTableModel) tableMenu.getModel();
+            for (int i = 0; i < tableMenu.getRowCount(); i++) {
+                if (tableMenu.getValueAt(i, 0).equals(id)) {
+                    int cantActual = Integer.parseInt(tableMenu.getValueAt(i, 2).toString());
+                    int nuevoCantidad = cantActual + 1;
+                    double nuevoSub = precio * nuevoCantidad;
+                    tmp.setValueAt(nuevoCantidad, i, 2);
+                    tmp.setValueAt(nuevoSub, i, 4);
+                    TotalPagar(tableMenu, totalMenu);
+                    return;
+                }
+            }
+            ArrayList lista = new ArrayList();
+            lista.add(item);
+            lista.add(id);
+            lista.add(descripcion);
+            lista.add(1);
+            lista.add(precio);
+            lista.add(total);
+            Object[] O = new Object[6];
+            O[0] = lista.get(1);
+            O[1] = lista.get(2);
+            O[2] = lista.get(3);
+            O[3] = lista.get(4);
+            O[4] = lista.get(5);
+            O[5] = "";
+            tmp.addRow(O);
+            tableMenu.setModel(tmp);
+            TotalPagar(tableMenu, totalMenu);
+        } else {
+            JOptionPane.showMessageDialog(null, "SELECCIONA UNA FILA");
+        }
+    }//GEN-LAST:event_btnAddPlatoActionPerformed
+
+    private void btnGenerarPedido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarPedido1ActionPerformed
+        if (tableMenu.getRowCount() > 0) {
+            RegistrarPedido();
+            detallePedido();
+            LimpiarTableMenu();
+            JOptionPane.showMessageDialog(null, "PEDIDO REGISTRADO");
+            jTabbedPane1.setSelectedIndex(0);
+        } else {
+            JOptionPane.showMessageDialog(null, "NO HAY PRODUCTO EN LA PEDIDO");
+        }
+    }//GEN-LAST:event_btnGenerarPedido1ActionPerformed
+
+    private void labelLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelLogoMouseClicked
+        // TODO add your handling code here:
+        LimpiarTable();
+                PanelMesas.removeAll();
+                panelMesas(15);
+                jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_labelLogoMouseClicked
+
+    private void TotalPagar(JTable tabla, JLabel label) {
+        Totalpagar = 0.00;
+        int numFila = tabla.getRowCount();
+        for (int i = 0; i < numFila; i++) {
+            double cal = Double.parseDouble(String.valueOf(tabla.getModel().getValueAt(i, 4)));
+            Totalpagar += cal;
+        }
+        label.setText(String.format("%.2f", Totalpagar));
+    }
+    
+    private void RegistrarPedido() {
+        double monto = Totalpagar;
+        int num_mesa = Integer.parseInt(txtTempNumMesa.getText());
+        ped.setId_sala(1);
+        ped.setNum_mesa(num_mesa);
+        ped.setTotal(monto);
+        ped.setUsuario(LabelVendedor.getText());
+        pedDao.RegistrarPedido(ped);
+    }
+
+    private void detallePedido() {
+        int id = pedDao.IdPedido();
+        for (int i = 0; i < tableMenu.getRowCount(); i++) {
+            String nombre = tableMenu.getValueAt(i, 1).toString();
+            int cant = Integer.parseInt(tableMenu.getValueAt(i, 2).toString());
+            double precio = Double.parseDouble(tableMenu.getValueAt(i, 3).toString());
+            detPedido.setNombre(nombre);
+            detPedido.setCantidad(cant);
+            detPedido.setPrecio(precio);
+            detPedido.setId_pedido(id);
+            pedDao.RegistrarDetalle(detPedido);
+
+        }
+    }
+    
+    private void LimpiarTableMenu() {
+        tmp = (DefaultTableModel) tableMenu.getModel();
+        int fila = tableMenu.getRowCount();
+        for (int i = 0; i < fila; i++) {
+            tmp.removeRow(0);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LabelVendedor;
@@ -967,7 +1087,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JButton btnEditarPlato;
     private javax.swing.JButton btnEliminarPlato;
     private javax.swing.JButton btnFinalizar;
-    private javax.swing.JTextField btnGenerarPedido;
+    private javax.swing.JButton btnGenerarPedido1;
     private javax.swing.JButton btnGuardarPlato;
     private javax.swing.JButton btnIniciar;
     private javax.swing.JButton btnNuevoPlato;
@@ -1032,7 +1152,6 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtPrecioPlato;
     private javax.swing.JTextField txtSalaFinalizar;
-    private javax.swing.JTextField txtTempIdSala;
     private javax.swing.JTextField txtTempNumMesa;
     // End of variables declaration//GEN-END:variables
     
@@ -1091,12 +1210,11 @@ public class Sistema extends javax.swing.JFrame {
                     verPedidoDetalle(verificar);
                     btnFinalizar.setEnabled(true);
                     btnPdfPedido.setEnabled(false);
-                    jTabbedPane1.setSelectedIndex(1);
+                    jTabbedPane1.setSelectedIndex(2);
                 } else {
                     LimpiarTable();
                     ListarPlatos(tblTemPlatos);
                     jTabbedPane1.setSelectedIndex(1);
-                    txtTempIdSala.setText("" + 1);
                     txtTempNumMesa.setText("" + num_mesa);
                 }
             });
