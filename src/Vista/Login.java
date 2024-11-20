@@ -99,7 +99,7 @@ public class Login extends javax.swing.JFrame {
         });
         jPanel1.add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 370, 170, 35));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 440));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 330, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

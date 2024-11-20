@@ -7,6 +7,7 @@
 package Vista;
 
 import Modelo.DetallePedido;
+import Modelo.LoginDao;
 import Modelo.Pedidos;
 import Modelo.PedidosDao;
 import Modelo.Platos;
@@ -51,6 +52,8 @@ public class Sistema extends javax.swing.JFrame {
     
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel tmp = new DefaultTableModel();
+    
+    LoginDao lgDao = new LoginDao();
     
     int item;
     double Totalpagar = 0.00;
@@ -165,7 +168,6 @@ public class Sistema extends javax.swing.JFrame {
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(102, 153, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setPreferredSize(new java.awt.Dimension(1310, 760));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(45, 45, 82));
@@ -275,8 +277,6 @@ public class Sistema extends javax.swing.JFrame {
 
         PanelMesas.setLayout(new java.awt.GridLayout(0, 5));
         jTabbedPane1.addTab("Mesas", PanelMesas);
-
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Platos del Dia"));
 
         btnAddPlato.setBackground(new java.awt.Color(0, 0, 0));
         btnAddPlato.setFont(new java.awt.Font("Arial", 1, 28)); // NOI18N
@@ -390,7 +390,7 @@ public class Sistema extends javax.swing.JFrame {
                             .addComponent(jLabel11)
                             .addComponent(totalMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGenerarPedido1))
-                        .addGap(0, 14, Short.MAX_VALUE)))
+                        .addGap(0, 24, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
@@ -911,6 +911,7 @@ public class Sistema extends javax.swing.JFrame {
     private void btnPlatos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlatos1ActionPerformed
         // TODO add your handling code here:
         LimpiarTable();
+        ListarUsuarios();
         jTabbedPane1.setSelectedIndex(5);
     }//GEN-LAST:event_btnPlatos1ActionPerformed
 
@@ -962,13 +963,19 @@ public class Sistema extends javax.swing.JFrame {
         if (txtNombre.getText().equals("") || txtCorreo.getText().equals("") || txtPass.getPassword().equals("")) {
             JOptionPane.showMessageDialog(null, "Todo los campos son requeridos");
         } else {
+            login lg = new login();
             String correo = txtCorreo.getText();
             String pass = String.valueOf(txtPass.getPassword());
             String nom = txtNombre.getText();
             String rol = cbxRol.getSelectedItem().toString();
-            
-            //sin uso aun
+            lg.setNombre(nom);
+            lg.setCorreo(correo);
+            lg.setPass(pass);
+            lg.setRol(rol);
+            lgDao.Registrar(lg);
             JOptionPane.showMessageDialog(null, "Usuario Registrado");
+            
+            ListarUsuarios();
         }
     }//GEN-LAST:event_btnIniciarActionPerformed
 
@@ -1159,6 +1166,21 @@ public class Sistema extends javax.swing.JFrame {
         txtIdPlato.setText("");
         txtNombrePlato.setText("");
         txtPrecioPlato.setText("");
+    }
+    
+    private void ListarUsuarios() {
+        List<login> Listar = lgDao.ListarUsuarios();
+        modelo = (DefaultTableModel) TableUsuarios.getModel();
+        modelo.setRowCount(0);
+        Object[] ob = new Object[4];
+        for (int i = 0; i < Listar.size(); i++) {
+            ob[0] = Listar.get(i).getId();
+            ob[1] = Listar.get(i).getNombre();
+            ob[2] = Listar.get(i).getCorreo();
+            ob[3] = Listar.get(i).getRol();
+            modelo.addRow(ob);
+        }
+        colorHeader(TableUsuarios);
     }
     
     private void listarMesas(){
