@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 //FALTA MEJORAR EL DISEÑO 
 package Vista;
 
@@ -36,36 +35,34 @@ import javax.swing.table.JTableHeader;
  * @author ginoalejandro
  */
 public class Sistema extends javax.swing.JFrame {
-    
+
     Salas sl = new Salas();
     SalasDao slDao = new SalasDao();
-    
+
     Platos pla = new Platos();
     PlatosDao plaDao = new PlatosDao();
-    
+
     Pedidos ped = new Pedidos();
     PedidosDao pedDao = new PedidosDao();
     DetallePedido detPedido = new DetallePedido();
-    
+
     Date fechaActual = new Date();
     String fechaFormato = new SimpleDateFormat("yyyy-MM-dd").format(fechaActual);
-    
+
     DefaultTableModel modelo = new DefaultTableModel();
     DefaultTableModel tmp = new DefaultTableModel();
-    
+
     LoginDao lgDao = new LoginDao();
-    
+
     int item;
     double Totalpagar = 0.00;
-    
-    
-    
+
     /**
      * Creates new form Sistema
      */
     public Sistema(login priv) {
         initComponents();
-        getContentPane().setBackground(new Color(29,29,54));
+        getContentPane().setBackground(new Color(29, 29, 54));
         listarMesas();
         if (priv.getRol().equals("Asistente")) {
             LabelVendedor.setText(priv.getNombre());
@@ -889,7 +886,7 @@ public class Sistema extends javax.swing.JFrame {
         jTabbedPane1.setSelectedIndex(4);
         LimpiarTable();
         ListarPlatos(TablePlatos);
-         
+
     }//GEN-LAST:event_btnPlatosActionPerformed
 
     private void TablePlatosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablePlatosMouseClicked
@@ -952,7 +949,7 @@ public class Sistema extends javax.swing.JFrame {
         verPedidoDetalle(id_pedido);
         jTabbedPane1.setSelectedIndex(4);
         btnFinalizar.setEnabled(false);
-        txtIdHistorialPedido.setText(""+id_pedido);
+        txtIdHistorialPedido.setText("" + id_pedido);
     }//GEN-LAST:event_TablePedidosMouseClicked
 
     private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
@@ -974,7 +971,7 @@ public class Sistema extends javax.swing.JFrame {
             lg.setRol(rol);
             lgDao.Registrar(lg);
             JOptionPane.showMessageDialog(null, "Usuario Registrado");
-            
+
             ListarUsuarios();
         }
     }//GEN-LAST:event_btnIniciarActionPerformed
@@ -1036,9 +1033,9 @@ public class Sistema extends javax.swing.JFrame {
     private void labelLogoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelLogoMouseClicked
         // TODO add your handling code here:
         LimpiarTable();
-                PanelMesas.removeAll();
-                panelMesas(15);
-                jTabbedPane1.setSelectedIndex(0);
+        PanelMesas.removeAll();
+        panelMesas(15);
+        jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_labelLogoMouseClicked
 
     private void TotalPagar(JTable tabla, JLabel label) {
@@ -1050,7 +1047,7 @@ public class Sistema extends javax.swing.JFrame {
         }
         label.setText(String.format("%.2f", Totalpagar));
     }
-    
+
     private void RegistrarPedido() {
         double monto = Totalpagar;
         int num_mesa = Integer.parseInt(txtTempNumMesa.getText());
@@ -1075,7 +1072,7 @@ public class Sistema extends javax.swing.JFrame {
 
         }
     }
-    
+
     private void LimpiarTableMenu() {
         tmp = (DefaultTableModel) tableMenu.getModel();
         int fila = tableMenu.getRowCount();
@@ -1161,13 +1158,13 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtSalaFinalizar;
     private javax.swing.JTextField txtTempNumMesa;
     // End of variables declaration//GEN-END:variables
-    
+
     private void LimpiarPlatos() {
         txtIdPlato.setText("");
         txtNombrePlato.setText("");
         txtPrecioPlato.setText("");
     }
-    
+
     private void ListarUsuarios() {
         List<login> Listar = lgDao.ListarUsuarios();
         modelo = (DefaultTableModel) TableUsuarios.getModel();
@@ -1182,15 +1179,15 @@ public class Sistema extends javax.swing.JFrame {
         }
         colorHeader(TableUsuarios);
     }
-    
-    private void listarMesas(){
-      Salas Listar = slDao.Listar();
-      int cantidadMesas = Listar.getMesas();
-      panelMesas(cantidadMesas);
-      
+
+    private void listarMesas() {
+        Salas Listar = slDao.Listar();
+        int cantidadMesas = Listar.getMesas();
+        panelMesas(cantidadMesas);
+
     }
-    
-        private void ListarPedidos() {
+
+    private void ListarPedidos() {
         Tables color = new Tables();
         List<Pedidos> Listar = pedDao.listarPedidos();
         modelo = (DefaultTableModel) TablePedidos.getModel();
@@ -1208,7 +1205,7 @@ public class Sistema extends javax.swing.JFrame {
         colorHeader(TablePedidos);
         TablePedidos.setDefaultRenderer(Object.class, color);
     }
-    
+
     private void panelMesas(int cant) {
         for (int i = 1; i <= cant; i++) {
             int num_mesa = i;
@@ -1242,7 +1239,7 @@ public class Sistema extends javax.swing.JFrame {
             });
         }
     }
-    
+
     public void verPedidoDetalle(int id_pedido) {
         List<DetallePedido> Listar = pedDao.verPedidoDetalle(id_pedido);
         modelo = (DefaultTableModel) tableFinalizar.getModel();
@@ -1258,7 +1255,7 @@ public class Sistema extends javax.swing.JFrame {
         }
         colorHeader(tableFinalizar);
     }
-    
+
     public void verPedido(int id_pedido) {
         ped = pedDao.verPedido(id_pedido);
         totalFinalizar.setText("" + ped.getTotal());
@@ -1267,7 +1264,7 @@ public class Sistema extends javax.swing.JFrame {
         txtNumMesaFinalizar.setText("" + ped.getNum_mesa());
         txtIdPedido.setText("" + ped.getId());
     }
-    
+
     private void ListarPlatos(JTable tabla) {
         //cambiar por una busqueda
         List<Platos> Listar = plaDao.Listar("", fechaFormato);
@@ -1280,15 +1277,15 @@ public class Sistema extends javax.swing.JFrame {
             modelo.addRow(ob);
         }
         colorHeader(tabla);
-    } 
-    
+    }
+
     public void LimpiarTable() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             modelo.removeRow(i);
             i = i - 1;
         }
     }
-    
+
     private void colorHeader(JTable tabla) {
         tabla.setModel(modelo);
         JTableHeader header = tabla.getTableHeader();
